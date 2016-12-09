@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Movie Music</string>
+    <string name="main_recent_btn">Недавние</string>
+    <string name="main_new_btn">Новое</string>
+    <string name="main_best_btn">Топ</string>
 </resources>
