@@ -1,11 +1,17 @@
 package com.surfcourse.nek.moviemusic.mainpage;
 
-/**
- * Created by nek on 26.01.17.
- */
 public class Movie {
   private String title;
   private int drawableId;
+  private int year;
+  private String description;
+
+  public Movie(String title, int drawableId, int year, String description) {
+    this.title = title;
+    this.drawableId = drawableId;
+    this.year = year;
+    this.description = description;
+  }
 
   public String getTitle() {
     return title;
@@ -15,9 +21,11 @@ public class Movie {
     return drawableId;
   }
 
-  public Movie(String title, int drawable) {
+  public int getYear() {
+    return year;
+  }
 
-    this.title = title;
-    this.drawableId = drawable;
+  public String getDescription() {
+    return description;
   }
 }

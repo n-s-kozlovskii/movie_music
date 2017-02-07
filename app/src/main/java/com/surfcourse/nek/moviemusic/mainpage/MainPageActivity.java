@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.surfcourse.nek.moviemusic.R;
+import com.surfcourse.nek.moviemusic.SearchResultActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class MainPageActivity extends AppCompatActivity {
     MovieAdapter.OnClickListener listener = new MovieAdapter.OnClickListener() {
       @Override
       public void onClick(View v, Movie movie) {
-        Toast.makeText(MainPageActivity.this, "It's working!", Toast.LENGTH_SHORT).show();
+        SearchResultActivity.start(MainPageActivity.this, movie);
       }
     };
     MovieAdapter movieAdapterNew = new MovieAdapter(getMovieList(), listener);
@@ -56,9 +57,12 @@ public class MainPageActivity extends AppCompatActivity {
   }
 
   public List<Movie> getMovieList() {
+    int[] drawables = new int[] {R.drawable.mock0, R.drawable.mock1, R.drawable.mock2,
+            R.drawable.mock3, R.drawable.mock4};
+    String description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.  type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. ";
     ArrayList<Movie> movieList = new ArrayList<>(20);
     for (int i=0; i<20; i++){
-      movieList.add(new Movie("movie "+i, R.drawable.poster));
+      movieList.add(new Movie("movie "+i, drawables[i % 5], 1995 - i, description));
     }
 
     return movieList;

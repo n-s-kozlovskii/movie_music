@@ -3,4 +3,5 @@
     <string name="main_page.recent">recent</string>
     <string name="main_page.top">top</string>
     <string name="main_page.new">new</string>
+    <string name="search_hint">search</string>
 </resources>

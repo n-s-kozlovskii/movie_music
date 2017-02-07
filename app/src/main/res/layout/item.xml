@@ -9,9 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/poster"
-        android:layout_margin="10dp"
-        />
+        android:src="@drawable/mock5"
+        android:layout_margin="10dp"/>
 
     <TextView
         android:id="@+id/item_text"
