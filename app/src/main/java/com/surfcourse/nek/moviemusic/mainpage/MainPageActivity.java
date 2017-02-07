@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.surfcourse.nek.moviemusic.R;
 
@@ -26,8 +27,14 @@ public class MainPageActivity extends AppCompatActivity {
     RecyclerView recyclerViewNew = (RecyclerView) findViewById(R.id.resview_new);
     RecyclerView recyclerViewTop = (RecyclerView) findViewById(R.id.resview_top);
 
-    MovieAdapter movieAdapterNew = new MovieAdapter(getMovieList());
-    MovieAdapter movieAdapterTop = new MovieAdapter(getMovieList());
+    MovieAdapter.OnClickListener listener = new MovieAdapter.OnClickListener() {
+      @Override
+      public void onClick(View v, Movie movie) {
+        Toast.makeText(MainPageActivity.this, "It's working!", Toast.LENGTH_SHORT).show();
+      }
+    };
+    MovieAdapter movieAdapterNew = new MovieAdapter(getMovieList(), listener);
+    MovieAdapter movieAdapterTop = new MovieAdapter(getMovieList(), listener);
 
     RecyclerView.LayoutManager layoutManagerNew = new LinearLayoutManager(getApplicationContext(),
             LinearLayoutManager.HORIZONTAL, false);

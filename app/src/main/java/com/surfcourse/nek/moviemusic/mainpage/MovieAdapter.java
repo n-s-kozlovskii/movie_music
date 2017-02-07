@@ -13,10 +13,17 @@ import com.surfcourse.nek.moviemusic.R;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder>{
-  private List<Movie> movies;
 
-  public MovieAdapter(List<Movie> movies) {
+  public interface OnClickListener {
+    void onClick(View v, Movie movie);
+  }
+
+  private List<Movie> movies;
+  private OnClickListener listener;
+
+  public MovieAdapter(List<Movie> movies, OnClickListener listener) {
     this.movies = movies;
+    this.listener = listener;
   }
 
   public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -38,9 +45,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
   @Override
   public void onBindViewHolder(MyViewHolder holder, int position) {
-    Movie movie = movies.get(position);
+    final Movie movie = movies.get(position);
     holder.title.setText(movie.getTitle());
     holder.poster.setImageResource(movie.getDrawableId());
+    if (listener != null) {
+      holder.itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          listener.onClick(v, movie);
+        }
+      });
+    }
   }
 
   @Override
