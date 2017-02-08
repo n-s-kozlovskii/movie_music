@@ -8,8 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.surfcourse.nek.moviemusic.mainpage.Movie;
+import com.surfcourse.nek.moviemusic.songs.Song;
+import com.surfcourse.nek.moviemusic.songs.SongListFragment;
 
-public class SearchResultActivity extends AppCompatActivity {
+public class SearchResultActivity extends AppCompatActivity implements SongListFragment.OnListFragmentInteractionListener {
 
   private static String KEY_TITLE = "title";
   private static String KEY_DRAWABLE = "drawable";
@@ -38,5 +40,10 @@ public class SearchResultActivity extends AppCompatActivity {
     ((TextView) findViewById(R.id.year_text))
             .setText(String.valueOf(intent.getIntExtra(KEY_YEAR, 1990)));
     ((TextView) findViewById(R.id.description_text)).setText(intent.getStringExtra(KEY_DESCRIPTION));
+  }
+
+  @Override
+  public void onListFragmentInteraction(Song item) {
+
   }
 }

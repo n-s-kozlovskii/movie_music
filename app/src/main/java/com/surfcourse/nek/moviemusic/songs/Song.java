@@ -1,8 +1,4 @@
-package com.surfcourse.nek.moviemusic;
-
-/**
- * Created by nek on 09.12.16.
- */
+package com.surfcourse.nek.moviemusic.songs;
 
 public class Song {
 

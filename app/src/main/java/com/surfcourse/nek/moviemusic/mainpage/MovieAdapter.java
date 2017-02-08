@@ -26,17 +26,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
     this.listener = listener;
   }
 
-  public class MyViewHolder extends RecyclerView.ViewHolder{
-    public TextView title;
-    public ImageView poster;
-
-    public MyViewHolder(View itemView) {
-      super(itemView);
-      title = (TextView) itemView.findViewById(R.id.item_text);
-      poster = (ImageView) itemView.findViewById(R.id.item_img);
-    }
-  }
-
   @Override
   public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item,parent,false);
@@ -61,5 +50,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
   @Override
   public int getItemCount() {
     return movies.size();
+  }
+
+  public class MyViewHolder extends RecyclerView.ViewHolder{
+    public TextView title;
+    public ImageView poster;
+
+    public MyViewHolder(View itemView) {
+      super(itemView);
+      title = (TextView) itemView.findViewById(R.id.item_text);
+      poster = (ImageView) itemView.findViewById(R.id.item_img);
+    }
   }
 }
