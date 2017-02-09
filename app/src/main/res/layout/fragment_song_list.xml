@@ -9,6 +9,7 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:background="@color/colorBackground"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.surfcourse.nek.moviemusic.songs.SongListFragment"
     tools:listitem="@layout/fragment_song"/>
