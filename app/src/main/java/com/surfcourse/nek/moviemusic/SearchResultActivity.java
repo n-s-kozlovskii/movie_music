@@ -40,6 +40,7 @@ public class SearchResultActivity extends AppCompatActivity implements SongListF
     ((TextView) findViewById(R.id.year_text))
             .setText(String.valueOf(intent.getIntExtra(KEY_YEAR, 1990)));
     ((TextView) findViewById(R.id.description_text)).setText(intent.getStringExtra(KEY_DESCRIPTION));
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
   }
 
   @Override

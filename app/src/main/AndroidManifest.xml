@@ -23,6 +23,12 @@
         <activity android:name="com.vk.sdk.VKServiceActivity"
                   android:label="ServiceActivity"
                   android:theme="@style/VK.Transparent" />
+        <activity android:name=".SearchResultActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".mainpage.MainPageActivity" />
+
+        </activity>
     </application>
 
 </manifest>
