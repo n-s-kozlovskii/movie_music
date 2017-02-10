@@ -16,6 +16,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".SearchResultActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".mainpage.MainPageActivity" />
+
         </activity>
     </application>
 
