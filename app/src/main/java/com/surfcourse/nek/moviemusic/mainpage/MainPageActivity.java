@@ -57,13 +57,23 @@ public class MainPageActivity extends AppCompatActivity {
   }
 
   public List<Movie> getMovieList() {
-    int[] drawables = new int[] {R.drawable.mock0, R.drawable.mock1, R.drawable.mock2,
-            R.drawable.mock3, R.drawable.mock4};
+    int[] drawables = new int[] {
+            R.drawable.mock0,
+            R.drawable.mock1,
+            R.drawable.mock2,
+            R.drawable.mock3,
+            R.drawable.mock4,
+            R.drawable.mock5,
+            R.drawable.mock6,
+            R.drawable.mock7,
+            R.drawable.mock8,
+            R.drawable.mock9
+    };
     String description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.  type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. ";
     description = description + description + description + description;
     ArrayList<Movie> movieList = new ArrayList<>(20);
-    for (int i=0; i<20; i++){
-      movieList.add(new Movie("movie " + i, drawables[i % 5], 1995 - i, description));
+    for (int i = 0; i < 20; i++){
+      movieList.add(new Movie("movie " + i, drawables[i % 10], 1995 - i, description));
     }
 
     return movieList;
