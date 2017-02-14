@@ -1,11 +1,16 @@
 package com.surfcourse.nek.moviemusic.mainpage;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +19,7 @@ import android.widget.Toast;
 
 import com.surfcourse.nek.moviemusic.R;
 import com.surfcourse.nek.moviemusic.SearchResultActivity;
+import com.surfcourse.nek.moviemusic.search.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,10 +56,6 @@ public class MainPageActivity extends AppCompatActivity {
     recyclerViewTop.setLayoutManager(layoutManagerTop);
     recyclerViewTop.setItemAnimator(new DefaultItemAnimator());
     recyclerViewTop.setAdapter(movieAdapterTop);
-
-
-
-
   }
 
   public List<Movie> getMovieList() {
@@ -68,5 +70,19 @@ public class MainPageActivity extends AppCompatActivity {
 
     return movieList;
   }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.options_menu, menu);
+
+    SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+    SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+    searchView.setSearchableInfo( searchManager.getSearchableInfo(new ComponentName(this, SearchActivity.class)) );
+
+    return true;
+  }
+
+
 }
 
