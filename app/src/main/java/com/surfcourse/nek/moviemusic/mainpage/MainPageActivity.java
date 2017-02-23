@@ -20,6 +20,11 @@ import android.widget.Toast;
 
 import com.surfcourse.nek.moviemusic.R;
 import com.surfcourse.nek.moviemusic.SearchResultActivity;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKError;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +34,7 @@ public class MainPageActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_page);
+    VKSdk.login(this, "1");
 
     Intent intent = getIntent();
     if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -62,9 +68,13 @@ public class MainPageActivity extends AppCompatActivity {
     recyclerViewTop.setLayoutManager(layoutManagerTop);
     recyclerViewTop.setItemAnimator(new DefaultItemAnimator());
     recyclerViewTop.setAdapter(movieAdapterTop);
+
+
+
+
   }
 
-  public static List<Movie> getMovieList() {
+  public List<Movie> getMovieList() {
     int[] drawables = new int[] {R.drawable.mock0, R.drawable.mock1, R.drawable.mock2,
             R.drawable.mock3, R.drawable.mock4};
     String description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.  type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. ";
@@ -95,5 +105,22 @@ public class MainPageActivity extends AppCompatActivity {
   }
 
 
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+      @Override
+      public void onResult(VKAccessToken res) {
+// Пользователь успешно авторизовался
+        Toast.makeText(getApplicationContext(),"успех", Toast.LENGTH_SHORT).show();
+      }
+      @Override
+      public void onError(VKError error) {
+// Произошла ошибка авторизации (например, пользователь запретил авторизацию)
+      }
+    })) {
+      super.onActivityResult(requestCode, resultCode, data);
+    }
+  }
 }
 

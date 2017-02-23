@@ -5,4 +5,5 @@
     <string name="main_page.new">new</string>
     <string name="search_hint">search movies</string>
     <string name="search">search</string>
+    <integer name="com_vk_sdk_AppId">5890473</integer>
 </resources>
