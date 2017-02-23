@@ -74,7 +74,7 @@ public class MainPageActivity extends AppCompatActivity {
 
   }
 
-  public List<Movie> getMovieList() {
+  public static List<Movie> getMovieList() {
     int[] drawables = new int[] {R.drawable.mock0, R.drawable.mock1, R.drawable.mock2,
             R.drawable.mock3, R.drawable.mock4};
     String description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.  type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. ";
