@@ -1,5 +1,6 @@
 package com.surfcourse.nek.moviemusic.mainpage;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,10 @@ import android.widget.Toast;
 
 import com.surfcourse.nek.moviemusic.R;
 import com.surfcourse.nek.moviemusic.SearchResultActivity;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +29,7 @@ public class MainPageActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_page);
+    VKSdk.login(this, "1");
 
     RecyclerView recyclerViewNew = (RecyclerView) findViewById(R.id.resview_new);
     RecyclerView recyclerViewTop = (RecyclerView) findViewById(R.id.resview_top);
@@ -67,6 +73,23 @@ public class MainPageActivity extends AppCompatActivity {
     }
 
     return movieList;
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+      @Override
+      public void onResult(VKAccessToken res) {
+// Пользователь успешно авторизовался
+        Toast.makeText(getApplicationContext(),"успех", Toast.LENGTH_SHORT).show();
+      }
+      @Override
+      public void onError(VKError error) {
+// Произошла ошибка авторизации (например, пользователь запретил авторизацию)
+      }
+    })) {
+      super.onActivityResult(requestCode, resultCode, data);
+    }
   }
 }
 
