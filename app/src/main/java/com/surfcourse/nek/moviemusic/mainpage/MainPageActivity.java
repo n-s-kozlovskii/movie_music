@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -34,7 +35,6 @@ public class MainPageActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_page);
-    VKSdk.login(this, "1");
 
     Intent intent = getIntent();
     if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -104,7 +104,16 @@ public class MainPageActivity extends AppCompatActivity {
     return true;
   }
 
-
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()){
+      case R.id.action_settings:
+        VKSdk.login(this, "1");
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
+    }
+  }
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
