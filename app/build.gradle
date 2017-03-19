@@ -6,7 +6,7 @@ android {
     buildToolsVersion "24.0.2"
     defaultConfig {
         applicationId "com.surfcourse.nek.moviemusic"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -16,6 +16,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        buildTypes.each {
+            it.buildConfigField "String", "API_USER", getMyApiKey("user")
+            it.buildConfigField "String", "API_KEY", getMyApiKey("pass")
         }
     }
 }
@@ -30,4 +34,12 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.1'
     compile project(':library:vksdk_library')
     testCompile 'junit:junit:4.12'
+}
+
+
+
+def getMyApiKey(String property){
+    Properties properties = new Properties()
+    properties.load(new FileInputStream("api/api.property"))
+    return "\"" + properties.getProperty(property) +"\""
 }
