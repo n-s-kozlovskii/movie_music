@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.surfcourse.nek.moviemusic">
-    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".MyApp"
@@ -12,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".mainpage.MainPageActivity">
+        <activity
+            android:name=".mainpage.MainPageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -20,15 +23,16 @@
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable"
-                />
+                android:resource="@xml/searchable"/>
 
-            <meta-data android:name="android.app.default_searchable"
-                       android:value=".mainpage.MainPageActivity" />
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".mainpage.MainPageActivity"/>
 
         </activity>
 
@@ -38,9 +42,10 @@
                 android:value=".mainpage.MainPageActivity"/>
 
         </activity>
-        <activity android:name="com.vk.sdk.VKServiceActivity"
-                  android:label="ServiceActivity"
-                  android:theme="@style/VK.Transparent" />
+        <activity
+            android:name="com.vk.sdk.VKServiceActivity"
+            android:label="ServiceActivity"
+            android:theme="@style/VK.Transparent"/>
 
     </application>
 
