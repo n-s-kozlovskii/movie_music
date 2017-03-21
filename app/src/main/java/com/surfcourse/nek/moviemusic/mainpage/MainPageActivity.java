@@ -34,7 +34,7 @@ public class MainPageActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_page);
-    VKSdk.login(this, "1");
+//    VKSdk.login(this, "1");
 
     Intent intent = getIntent();
     if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -74,7 +74,7 @@ public class MainPageActivity extends AppCompatActivity {
 
   }
 
-  public List<Movie> getMovieList() {
+  public static List<Movie> getMovieList() {
     int[] drawables = new int[] {
             R.drawable.mock0,
             R.drawable.mock1,
