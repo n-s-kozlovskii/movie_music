@@ -1,1 +1,2 @@
-include ':vksdk_library', ':app'
+include ':app'
+include ':library:vksdk_library'

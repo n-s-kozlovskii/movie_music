@@ -2,12 +2,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
     defaultConfig {
         applicationId "com.surfcourse.nek.moviemusic"
-        minSdkVersion 21
-        targetSdkVersion 25
+        minSdkVersion 19
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -17,6 +17,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        buildTypes.each {
+            it.buildConfigField "String", "API_USER", getMyApiKey("user")
+            it.buildConfigField "String", "API_KEY", getMyApiKey("pass")
+        }
     }
 }
 
@@ -25,10 +29,17 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.1'
-    compile 'com.android.support:recyclerview-v7:25.1.1'
-    compile 'com.android.support:support-v4:25.1.1'
-    compile 'com.android.support:design:25.1.1'
-    compile project(':vksdk_library')
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile project(':library:vksdk_library')
     testCompile 'junit:junit:4.12'
+}
+
+
+
+def getMyApiKey(String property){
+    Properties properties = new Properties()
+    properties.load(new FileInputStream("api/api.property"))
+    return "\"" + properties.getProperty(property) +"\""
 }
