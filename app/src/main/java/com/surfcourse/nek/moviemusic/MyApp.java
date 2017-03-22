@@ -16,7 +16,6 @@ public class MyApp extends Application {
 
   @Override
   public void onCreate() {
-    Log.d(TAG, API_KEY);
     super.onCreate();
     VKSdk.initialize(getApplicationContext());
   }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.surfcourse.nek.moviemusic.mainpage.Movie;
 import com.surfcourse.nek.moviemusic.songs.Song;
 import com.surfcourse.nek.moviemusic.songs.SongListFragment;
@@ -34,8 +35,10 @@ public class SearchResultActivity extends AppCompatActivity implements SongListF
 
     Intent intent = getIntent();
 
-    ((ImageView) findViewById(R.id.poster_img_view))
-            .setImageDrawable(getDrawable(intent.getIntExtra(KEY_DRAWABLE, 0)));
+
+    Picasso.with(this)
+            .load(intent.getIntExtra(KEY_DRAWABLE, 0))
+            .into((ImageView) findViewById(R.id.poster_img_view));
     ((TextView) findViewById(R.id.title_text)).setText(intent.getStringExtra(KEY_TITLE));
     ((TextView) findViewById(R.id.year_text))
             .setText(String.valueOf(intent.getIntExtra(KEY_YEAR, 1990)));

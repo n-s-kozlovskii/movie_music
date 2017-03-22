@@ -1,6 +1,5 @@
 package com.surfcourse.nek.moviemusic.mainpage;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.surfcourse.nek.moviemusic.R;
 
 import java.util.List;
@@ -36,7 +36,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
   public void onBindViewHolder(MyViewHolder holder, int position) {
     final Movie movie = movies.get(position);
     holder.title.setText(movie.getTitle());
-    holder.poster.setImageResource(movie.getDrawableId());
+    //holder.poster.setImageResource(movie.getDrawableId());
+    Picasso.with(holder.poster.getContext()).load(movie.getDrawableId()).into(holder.poster);
+
     if (listener != null) {
       holder.itemView.setOnClickListener(new View.OnClickListener() {
         @Override
