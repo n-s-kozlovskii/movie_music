@@ -37,7 +37,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
     final Movie movie = movies.get(position);
     holder.title.setText(movie.getTitle());
     //holder.poster.setImageResource(movie.getDrawableId());
-    Picasso.with(holder.poster.getContext()).load(movie.getDrawableId()).into(holder.poster);
+    Picasso.with(holder.poster.getContext()).load(movie.getDrawableId())
+            .resize(100, 140)
+            .into(holder.poster);
 
     if (listener != null) {
       holder.itemView.setOnClickListener(new View.OnClickListener() {
