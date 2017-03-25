@@ -45,6 +45,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="update"/>
+        <Button
+            android:id="@+id/test_con"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="show"/>
     </LinearLayout>
     <TextView
         android:id="@+id/login_tv"

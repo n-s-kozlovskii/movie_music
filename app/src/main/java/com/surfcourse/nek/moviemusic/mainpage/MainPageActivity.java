@@ -1,10 +1,8 @@
 package com.surfcourse.nek.moviemusic.mainpage;
 
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,14 +18,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.surfcourse.nek.moviemusic.R;
 import com.surfcourse.nek.moviemusic.SearchResultActivity;
+import com.surfcourse.nek.moviemusic.networking.models.RetrofitProvider;
+import com.surfcourse.nek.moviemusic.networking.models.api.MovieDbApi;
+import com.surfcourse.nek.moviemusic.networking.models.themoviedb.MovieDbResponse;
+import com.surfcourse.nek.moviemusic.networking.models.themoviedb.Result;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
@@ -35,6 +35,10 @@ import com.vk.sdk.api.VKError;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 public class MainPageActivity extends AppCompatActivity implements
         View.OnClickListener,
@@ -63,6 +67,7 @@ public class MainPageActivity extends AppCompatActivity implements
 
     findViewById(R.id.login_btn).setOnClickListener(this);
     findViewById(R.id.update_login_btn).setOnClickListener(this);
+    findViewById(R.id.test_con).setOnClickListener(this);
     updateLoginState();
   }
 
@@ -153,7 +158,26 @@ public class MainPageActivity extends AppCompatActivity implements
         updateLoginState();
         break;
       }
+      case R.id.test_con: {
+        testMovieDbConnection();
+        break;
+      }
     }
+  }
+
+  private void testMovieDbConnection() {
+    RetrofitProvider pr = RetrofitProvider.getRetrofitProvider();
+    Retrofit retrofit = pr.getRetrofit();
+    MovieDbApi api = retrofit.create(MovieDbApi.class);
+    api.getMoviesByTitle(pr.getMovieDbKey(),"Transformers")
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe(movies -> printMovie(movies));
+  }
+
+  private void printMovie(MovieDbResponse movies) {
+    Result res = movies.getResults().get(0);
+    Movie movie = new Movie(res.getTitle(), res.getPosterPath(), res.getReleaseDate(), res.getOverview());
+    SearchResultActivity.start(this, movie);
   }
 
   @Override
@@ -196,7 +220,7 @@ public class MainPageActivity extends AppCompatActivity implements
     description = description + description + description + description;
     ArrayList<Movie> movieList = new ArrayList<>(20);
     for (int i = 0; i < 20; i++) {
-      movieList.add(new Movie("movie " + i, drawables[i % 10], 1995 - i, description));
+      movieList.add(new Movie("movie " + i, drawables[i % 10], Integer.toString(1995 - i), description));
     }
 
     return movieList;
@@ -204,7 +228,7 @@ public class MainPageActivity extends AppCompatActivity implements
 
   private void performSearch(String query) {
     List<Movie> movie = getMovieList();
-    SearchResultActivity.start(this, new Movie(query, R.drawable.mock4, 2003, "descp"));
+    SearchResultActivity.start(this, new Movie(query, R.drawable.mock4, "2003", "descp"));
   }
 
   private void updateLoginState() {

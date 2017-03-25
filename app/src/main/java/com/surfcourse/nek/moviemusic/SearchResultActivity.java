@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.surfcourse.nek.moviemusic.songs.SongListFragment;
 
 public class SearchResultActivity extends AppCompatActivity implements SongListFragment.OnListFragmentInteractionListener {
 
+  private static final String KEY_IMAGEURL = "img_url";
   private static String KEY_TITLE = "title";
   private static String KEY_DRAWABLE = "drawable";
   private static String KEY_YEAR = "year";
@@ -23,6 +25,7 @@ public class SearchResultActivity extends AppCompatActivity implements SongListF
     Intent intent = new Intent(context, SearchResultActivity.class);
     intent.putExtra(KEY_TITLE, movie.getTitle());
     intent.putExtra(KEY_DRAWABLE, movie.getDrawableId());
+    intent.putExtra(KEY_IMAGEURL, movie.getImageUrl());
     intent.putExtra(KEY_YEAR, movie.getYear());
     intent.putExtra(KEY_DESCRIPTION, movie.getDescription());
     context.startActivity(intent);
@@ -35,10 +38,18 @@ public class SearchResultActivity extends AppCompatActivity implements SongListF
 
     Intent intent = getIntent();
 
+    String img_url = intent.getStringExtra(KEY_IMAGEURL);
+    Log.d(getClass().getSimpleName(), img_url);
+    if (img_url == null){
+      Picasso.with(this)
+              .load(intent.getIntExtra(KEY_DRAWABLE, 0))
+              .into((ImageView) findViewById(R.id.poster_img_view));
+    } else {
 
-    Picasso.with(this)
-            .load(intent.getIntExtra(KEY_DRAWABLE, 0))
-            .into((ImageView) findViewById(R.id.poster_img_view));
+      Picasso.with(this)
+              .load("http://image.tmdb.org/t/p/w300/"+img_url)
+              .into((ImageView) findViewById(R.id.poster_img_view));
+    }
     ((TextView) findViewById(R.id.title_text)).setText(intent.getStringExtra(KEY_TITLE));
     ((TextView) findViewById(R.id.year_text))
             .setText(String.valueOf(intent.getIntExtra(KEY_YEAR, 1990)));

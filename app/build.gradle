@@ -20,7 +20,12 @@ android {
         buildTypes.each {
             it.buildConfigField "String", "API_USER", getMyApiKey("user")
             it.buildConfigField "String", "API_KEY", getMyApiKey("pass")
+            it.buildConfigField "String", "MOVIEDB_KEY", getMyApiKey("movie_db_key")
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
