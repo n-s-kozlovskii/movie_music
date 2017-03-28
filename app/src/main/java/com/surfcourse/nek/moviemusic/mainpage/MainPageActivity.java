@@ -1,10 +1,8 @@
 package com.surfcourse.nek.moviemusic.mainpage;
 
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,30 +15,40 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.surfcourse.nek.moviemusic.R;
 import com.surfcourse.nek.moviemusic.SearchResultActivity;
+import com.surfcourse.nek.moviemusic.util.CircularTransformation;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainPageActivity extends AppCompatActivity implements
-        View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener {
 
   private DrawerLayout drawer;
+  private NavigationView navigationView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -50,20 +58,13 @@ public class MainPageActivity extends AppCompatActivity implements
     Intent intent = getIntent();
     if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
       String query = intent.getStringExtra(SearchManager.QUERY);
-      //Toast.makeText(this, query, Toast.LENGTH_SHORT).show();
       performSearch(query);
     }
 
     initBarAndDrawer();
     initRecyclers();
 
-    // Nav
-    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-    navigationView.setNavigationItemSelectedListener(this);
-
-    findViewById(R.id.login_btn).setOnClickListener(this);
-    findViewById(R.id.update_login_btn).setOnClickListener(this);
-    updateLoginState();
+    updateUserInfo();
   }
 
   private void initBarAndDrawer() {
@@ -75,13 +76,16 @@ public class MainPageActivity extends AppCompatActivity implements
             this, drawer, toolbar,
             R.string.navigation_drawer_open, R.string.navigation_drawer_close
     );
-    drawer.setDrawerListener(toggle);
+    drawer.addDrawerListener(toggle);
     toggle.syncState();
+
+    navigationView = (NavigationView) findViewById(R.id.nav_view);
+    navigationView.setNavigationItemSelectedListener(this);
   }
 
   private void initRecyclers() {
-    RecyclerView recyclerViewNew = (RecyclerView) findViewById(R.id.resview_new);
-    RecyclerView recyclerViewTop = (RecyclerView) findViewById(R.id.resview_top);
+    RecyclerView recyclerViewNew = (RecyclerView) findViewById(R.id.res_view_new);
+    RecyclerView recyclerViewTop = (RecyclerView) findViewById(R.id.res_view_top);
 
     MovieAdapter.OnClickListener listener = new MovieAdapter.OnClickListener() {
       @Override
@@ -121,38 +125,23 @@ public class MainPageActivity extends AppCompatActivity implements
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+    boolean success = VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
       @Override
       public void onResult(VKAccessToken res) {
-        // Пользователь успешно авторизовался
-        Toast.makeText(getApplicationContext(), "успех", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),
+                "Вы успешно авторизовались", Toast.LENGTH_SHORT).show();
+        updateUserInfo();
       }
 
       @Override
       public void onError(VKError error) {
-        // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
+        Toast.makeText(MainPageActivity.this, error.errorMessage, Toast.LENGTH_SHORT).show();
+        Log.d("VK Login Error", error.errorMessage + " " + error.errorReason + " " + error.errorCode);
       }
-    })) {
-      super.onActivityResult(requestCode, resultCode, data);
-    }
-  }
+    });
 
-  @Override
-  public void onClick(View v) {
-    switch (v.getId()) {
-      case R.id.login_btn: {
-        if (VKSdk.isLoggedIn()) {
-          VKSdk.logout();
-        } else {
-          VKSdk.login(this, "1");
-        }
-        updateLoginState();
-        break;
-      }
-      case R.id.update_login_btn: {
-        updateLoginState();
-        break;
-      }
+    if (!success) {
+      super.onActivityResult(requestCode, resultCode, data);
     }
   }
 
@@ -169,8 +158,13 @@ public class MainPageActivity extends AppCompatActivity implements
   @Override
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
     switch (item.getItemId()) {
-      case R.id.nav_share: {
-        Toast.makeText(this, "shared", Toast.LENGTH_SHORT).show();
+      case R.id.nav_vk: {
+        if (VKSdk.isLoggedIn()) {
+          VKSdk.logout();
+        } else {
+          VKSdk.login(this, VKScope.NOTIFY);
+        }
+        updateUserInfo();
         break;
       }
     }
@@ -203,20 +197,65 @@ public class MainPageActivity extends AppCompatActivity implements
   }
 
   private void performSearch(String query) {
-    List<Movie> movie = getMovieList();
-    SearchResultActivity.start(this, new Movie(query, R.drawable.mock4, 2003, "descp"));
+    SearchResultActivity.start(this, new Movie(query, R.drawable.mock4, 2003, "description"));
   }
 
-  private void updateLoginState() {
-    TextView textView = (TextView) findViewById(R.id.login_tv);
-    Button btn = (Button) findViewById(R.id.login_btn);
+  private void updateUserInfo() {
+    String newTitle;
     if (VKSdk.isLoggedIn()) {
-      textView.setText("You're logged in");
-      btn.setText("Log out");
+      newTitle = "Выйти";
+      VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "photo_200"));
+      request.executeWithListener(new VKRequest.VKRequestListener() {
+        @Override
+        public void onComplete(VKResponse response) {
+          try {
+            JSONObject user = response.json.getJSONArray("response").getJSONObject(0);
+            String name = user.getString("first_name")  + " " + user.getString("last_name");
+            String photo = user.getString("photo_200");
+
+            ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView))
+                    .setText(name);
+            Picasso.with(MainPageActivity.this)
+                    .load(photo)
+                    .resize(150, 150)
+                    .transform(new CircularTransformation())
+                    .into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.imageView));
+
+            Log.d("VK request", "completed " + name + " " + photo);
+          } catch (JSONException e) {
+            e.printStackTrace();
+          }
+
+        }
+
+        @Override
+        public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
+          Log.d("VK request", "attemptFailed");
+        }
+
+        @Override
+        public void onError(VKError error) {
+          Log.d("VK request", "error " + error.errorMessage);
+        }
+
+        @Override
+        public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
+          Log.d("VK request", "progress...");
+        }
+      });
     } else {
-      textView.setText("You're not logged in");
-      btn.setText("Log in");
+      newTitle = "Авторизаваться через vk";
+      Picasso.with(MainPageActivity.this)
+              .load(R.drawable.mock9)
+              .resize(100, 100)
+              .into((ImageView) navigationView.getHeaderView(0).findViewById(R.id.imageView));
+      ((TextView) navigationView.getHeaderView(0).findViewById(R.id.textView))
+              .setText(R.string.name_placeholder);
     }
+    MenuItem item = navigationView.getMenu().findItem(R.id.nav_vk);
+    item.setTitle(newTitle);
+
+    // Get name and stuff
   }
 }
 
