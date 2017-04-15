@@ -4,11 +4,14 @@ package com.surfcourse.nek.moviemusic.networking.models.themoviedb;
  * Created by nek on 25.03.17.
  */
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class MovieDbResponse {
+public class MovieDbResponse{
 
   @SerializedName("page")
   @Expose

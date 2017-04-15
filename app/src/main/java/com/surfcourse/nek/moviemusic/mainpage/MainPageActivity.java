@@ -3,6 +3,8 @@ package com.surfcourse.nek.moviemusic.mainpage;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,11 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.surfcourse.nek.moviemusic.R;
-import com.surfcourse.nek.moviemusic.SearchResultActivity;
+import com.surfcourse.nek.moviemusic.MovieInfoActivity;
 import com.surfcourse.nek.moviemusic.networking.models.RetrofitProvider;
 import com.surfcourse.nek.moviemusic.networking.models.api.MovieDbApi;
 import com.surfcourse.nek.moviemusic.networking.models.themoviedb.MovieDbResponse;
 import com.surfcourse.nek.moviemusic.networking.models.themoviedb.Result;
+import com.surfcourse.nek.moviemusic.search.SearchListActivity;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
@@ -88,12 +91,7 @@ public class MainPageActivity extends AppCompatActivity implements
     RecyclerView recyclerViewNew = (RecyclerView) findViewById(R.id.resview_new);
     RecyclerView recyclerViewTop = (RecyclerView) findViewById(R.id.resview_top);
 
-    MovieAdapter.OnClickListener listener = new MovieAdapter.OnClickListener() {
-      @Override
-      public void onClick(View v, Movie movie) {
-        SearchResultActivity.start(MainPageActivity.this, movie);
-      }
-    };
+    MovieAdapter.OnClickListener listener = (v, movie) -> MovieInfoActivity.start(MainPageActivity.this, movie);
     MovieAdapter movieAdapterNew = new MovieAdapter(getMovieList(), listener);
     MovieAdapter movieAdapterTop = new MovieAdapter(getMovieList(), listener);
 
@@ -167,7 +165,7 @@ public class MainPageActivity extends AppCompatActivity implements
 
   private void testMovieDbConnection() {
     RetrofitProvider pr = RetrofitProvider.getRetrofitProvider();
-    Retrofit retrofit = pr.getRetrofit();
+    Retrofit retrofit = pr.getMovieDbRetrofit();
     MovieDbApi api = retrofit.create(MovieDbApi.class);
     api.getMoviesByTitle(pr.getMovieDbKey(),"Transformers")
             .subscribeOn(Schedulers.newThread())
@@ -177,7 +175,7 @@ public class MainPageActivity extends AppCompatActivity implements
   private void printMovie(MovieDbResponse movies) {
     Result res = movies.getResults().get(0);
     Movie movie = new Movie(res.getTitle(), res.getPosterPath(), res.getReleaseDate(), res.getOverview());
-    SearchResultActivity.start(this, movie);
+    MovieInfoActivity.start(this, movie);
   }
 
   @Override
@@ -226,15 +224,39 @@ public class MainPageActivity extends AppCompatActivity implements
     return movieList;
   }
 
+  private boolean isConnected(){
+    ConnectivityManager cm =
+            (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+    return activeNetwork != null? activeNetwork.isConnected(): false;
+  }
+
   private void performSearch(String query) {
-    List<Movie> movie = getMovieList();
-    SearchResultActivity.start(this, new Movie(query, R.drawable.mock4, "2003", "descp"));
+    if (!isConnected()){
+      Toast.makeText(this, "No network", Toast.LENGTH_LONG).show();
+      return;
+    }
+
+    RetrofitProvider pr = RetrofitProvider.getRetrofitProvider();
+    Retrofit retrofit = pr.getMovieDbRetrofit();
+    MovieDbApi api = retrofit.create(MovieDbApi.class);
+    api.getMoviesByTitle(pr.getMovieDbKey(),query)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(movies -> showResults(movies.getResults()));
+
+  }
+
+  private void showResults(List<Result> results) {
+    SearchListActivity.start(this, results);
   }
 
   private void updateLoginState() {
     TextView textView = (TextView) findViewById(R.id.login_tv);
     Button btn = (Button) findViewById(R.id.login_btn);
     if (VKSdk.isLoggedIn()) {
+
       textView.setText("You're logged in");
       btn.setText("Log out");
     } else {

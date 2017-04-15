@@ -13,13 +13,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitProvider {
   private static RetrofitProvider retrofitProvider;
-  private Retrofit retrofit;
+  private Retrofit movieDbRetrofit;
   private String TUNEF_API_USER;
   private String TUNEF_API_KEY;
   private String MOVIEDB_KEY;
 
   private RetrofitProvider() {
-    retrofit = new Retrofit.Builder()
+    movieDbRetrofit = new Retrofit.Builder()
             .baseUrl("https://api.themoviedb.org/3/search/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
@@ -29,15 +29,15 @@ public class RetrofitProvider {
     MOVIEDB_KEY = BuildConfig.MOVIEDB_KEY;
   }
 
-  public Retrofit getRetrofit() {
-    return retrofit;
+  public Retrofit getMovieDbRetrofit() {
+    return movieDbRetrofit;
   }
 
-  public String getTUNEF_API_USER() {
+  public String getTunefindUser() {
     return TUNEF_API_USER;
   }
 
-  public String getTUNEF_API_KEY() {
+  public String getTunefindKey() {
     return TUNEF_API_KEY;
   }
 

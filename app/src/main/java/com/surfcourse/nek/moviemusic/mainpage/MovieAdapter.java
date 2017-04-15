@@ -28,7 +28,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
   @Override
   public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item,parent,false);
+    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mainpage_rv_item, parent,false);
     return new MyViewHolder(view);
   }
 
@@ -42,12 +42,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
             .into(holder.poster);
 
     if (listener != null) {
-      holder.itemView.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          listener.onClick(v, movie);
-        }
-      });
+      holder.itemView.setOnClickListener(v -> listener.onClick(v, movie));
     }
   }
 

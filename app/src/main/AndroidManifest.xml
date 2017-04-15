@@ -3,6 +3,7 @@
           package="com.surfcourse.nek.moviemusic">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".MyApp"
@@ -31,7 +32,7 @@
                 android:name="android.app.default_searchable"
                 android:value=".mainpage.MainPageActivity"/>
         </activity>
-        <activity android:name=".SearchResultActivity">
+        <activity android:name=".MovieInfoActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".mainpage.MainPageActivity"/>
@@ -41,6 +42,8 @@
             android:label="ServiceActivity"
             android:theme="@style/VK.Transparent"/>
         <activity android:name=".search_res.SearchResActivity">
+        </activity>
+        <activity android:name=".search.SearchListActivity">
         </activity>
     </application>
 

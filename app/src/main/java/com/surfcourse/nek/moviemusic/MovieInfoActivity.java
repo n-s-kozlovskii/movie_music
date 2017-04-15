@@ -13,7 +13,7 @@ import com.surfcourse.nek.moviemusic.mainpage.Movie;
 import com.surfcourse.nek.moviemusic.songs.Song;
 import com.surfcourse.nek.moviemusic.songs.SongListFragment;
 
-public class SearchResultActivity extends AppCompatActivity implements SongListFragment.OnListFragmentInteractionListener {
+public class MovieInfoActivity extends AppCompatActivity implements SongListFragment.OnListFragmentInteractionListener {
 
   private static final String KEY_IMAGEURL = "img_url";
   private static String KEY_TITLE = "title";
@@ -22,7 +22,7 @@ public class SearchResultActivity extends AppCompatActivity implements SongListF
   private static String KEY_DESCRIPTION = "description";
 
   public static void start(Context context, Movie movie) {
-    Intent intent = new Intent(context, SearchResultActivity.class);
+    Intent intent = new Intent(context, MovieInfoActivity.class);
     intent.putExtra(KEY_TITLE, movie.getTitle());
     intent.putExtra(KEY_DRAWABLE, movie.getDrawableId());
     intent.putExtra(KEY_IMAGEURL, movie.getImageUrl());
@@ -39,13 +39,12 @@ public class SearchResultActivity extends AppCompatActivity implements SongListF
     Intent intent = getIntent();
 
     String img_url = intent.getStringExtra(KEY_IMAGEURL);
-    Log.d(getClass().getSimpleName(), img_url);
     if (img_url == null){
       Picasso.with(this)
               .load(intent.getIntExtra(KEY_DRAWABLE, 0))
               .into((ImageView) findViewById(R.id.poster_img_view));
     } else {
-
+      Log.d(getClass().getSimpleName(), img_url);
       Picasso.with(this)
               .load("http://image.tmdb.org/t/p/w300/"+img_url)
               .into((ImageView) findViewById(R.id.poster_img_view));
