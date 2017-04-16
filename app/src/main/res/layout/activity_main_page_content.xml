@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:text="@string/main_page.new"/>
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/resview_new"
+        android:id="@+id/res_view_new"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"/>
@@ -27,30 +27,10 @@
         android:layout_height="wrap_content"
         android:text="@string/main_page.top"/>
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/resview_top"
+        android:id="@+id/res_view_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-
-    <!--Test stuff-->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/login_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <Button
-            android:id="@+id/update_login_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="update"/>
-        <Button
-            android:id="@+id/test_con"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="show"/>
-    </LinearLayout>
     <TextView
         android:id="@+id/login_tv"
         android:layout_width="wrap_content"
